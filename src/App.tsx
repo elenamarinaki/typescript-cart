@@ -34,7 +34,23 @@ const App = () => {
   const getTotalItems = (items: CartItemType[]) =>
     items.reduce((acc: number, item) => acc + item.amount, 0)
 
-  const handleAddToCart = (clickedItem: CartItemType) => null
+  const handleAddToCart = (clickedItem: CartItemType) => {
+    setCartItems((s) => {
+      // 1. is the item already in cart?
+      const isItemInCart = s.find((item) => item.id === clickedItem.id)
+
+      if (isItemInCart) {
+        return s.map((item) =>
+          item.id === clickedItem.id
+            ? { ...item, amount: item.amount + 1 }
+            : item
+        )
+      }
+
+      // 2. first time the item is added
+      return [...s, { ...clickedItem, amount: 1 }]
+    })
+  }
   const handleRemoveFromCart = () => null
 
   if (isLoading) return <LinearProgress />
